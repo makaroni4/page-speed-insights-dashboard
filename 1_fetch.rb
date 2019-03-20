@@ -5,6 +5,7 @@ require "json"
 require "byebug"
 require "yaml"
 
+
 BASE_URL = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
 DATA_FILE = "historic_data.yml"
 PSI_DEVICE_TYPES = %w(mobile desktop)
@@ -44,11 +45,11 @@ def fetch(device_type, url)
   return raw_data if raw_data.has_key?("error")
 
   {
-    speed_index: extract_metric(raw_data, "speed-index", "score"),
-    first_contentful_paint: extract_metric(raw_data, "first-contentful-paint", "displayValue"),
-    time_to_interactive: extract_metric(raw_data, "interactive", "displayValue"),
-    first_meaningful_paint: extract_metric(raw_data, "first-meaningful-paint", "displayValue"),
-    first_cpu_idle: extract_metric(raw_data, "first-cpu-idle", "displayValue")
+    speed_index: (extract_metric(raw_data, "speed-index", "score") * 100).to_i,
+    first_contentful_paint: extract_metric(raw_data, "first-contentful-paint", "displayValue").to_f,
+    time_to_interactive: extract_metric(raw_data, "interactive", "displayValue").to_f,
+    first_meaningful_paint: extract_metric(raw_data, "first-meaningful-paint", "displayValue").to_f,
+    first_cpu_idle: extract_metric(raw_data, "first-cpu-idle", "displayValue").to_f
   }
 end
 
