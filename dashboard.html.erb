@@ -22,21 +22,8 @@
 </head>
 
 <body>
-  <div id="wrapper">
-    <div id="chart-line">
-
-    </div>
-
-    <div id="chart-line2">
-
-    </div>
-
-    <div id="chart-area">
-
-      </div>
+  <div class="charts">
   </div>
-
-
 
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
 
@@ -95,110 +82,66 @@
       },
     }
 
-    var optionsLine1 = {
-      chart: {
-        id: 'fb',
-        group: 'social',
-        type: 'line',
-      },
-      colors: ['#008FFB'],
-      series: [{
-        data: generateDayWiseTimeSeries(new Date('11 Feb 2017').getTime(), 20, {
-          min: 10,
-          max: 60
-        })
-      }],
-      yaxis: {
-        labels: {
-          minWidth: 40
-        }
-      }
-    }
+    Object.keys(reportData).forEach(function(psiUrl) {
+      var urlReport = reportData[psiUrl];
+      var deviceTypes = ["mobile", "desktop"];
 
-    var chartLine1 = new ApexCharts(
-      document.querySelector("#chart-line"),
-      optionsLine1
-    );
+      deviceTypes.forEach(function(deviceType) {
+        var metrics = [
+          "speed_index",
+          "first_contentful_paint",
+          "time_to_interactive",
+          "first_meaningful_paint",
+          "first_cpu_idle"
+        ];
 
-    chartLine1.render();
+        var psiReport = urlReport[deviceType];
 
-    var optionsline2 = {
-      chart: {
-        id: 'tw',
-        group: 'social',
-        type: 'line',
-      },
-      colors: ['#546E7A'],
-      series: [{
-        data: generateDayWiseTimeSeries(new Date('11 Feb 2017').getTime(), 20, {
-          min: 10,
-          max: 30
-        })
-      }],
-      yaxis: {
-        labels: {
-          minWidth: 40
-        }
-      }
-    }
+        metrics.forEach(function(metric) {
+          var timeline = Object.keys(psiReport).map(function(timestamp) {
+            return [new Date(timestamp), psiReport[timestamp][metric]]
+          });
 
-    var chartline2 = new ApexCharts(
-      document.querySelector("#chart-line2"),
-      optionsline2
-    );
+          console.log(psiUrl)
+          console.log(deviceType)
+          console.log(metric)
+          console.log(timeline)
 
-    chartline2.render();
+          var optionsLine = {
+            chart: {
+              id: deviceType + '-' + metric,
+              group: psiUrl,
+              type: 'line',
+            },
+            title: {
+              text: psiUrl + ' - ' + deviceType + ' - ' + metric
+            },
+            colors: ['#008FFB'],
+            series: [{
+              data: timeline
+            }],
+            yaxis: {
+              labels: {
+                minWidth: 40
+              }
+            }
+          }
 
+          var $charts = document.querySelector(".charts");
 
-    var optionsArea = {
-      chart: {
-        id: 'yt',
-        group: 'social',
-        type: 'area'
-      },
-      colors: ['#00E396'],
-      series: [{
-        data: generateDayWiseTimeSeries(new Date('11 Feb 2017').getTime(), 20, {
-          min: 10,
-          max: 60
-        })
-      }],
-      yaxis: {
-        labels: {
-          minWidth: 40
-        }
-      }
-    }
+          var $chartContainer = document.createElement('div');
 
-    var chartArea = new ApexCharts(
-      document.querySelector("#chart-area"),
-      optionsArea
-    );
+          $charts.appendChild($chartContainer);
 
-    chartArea.render();
+          var chartLine = new ApexCharts(
+            $chartContainer,
+            optionsLine
+          );
 
-    /*
-      // this function will generate output in this format
-      // data = [
-          [timestamp, 23],
-          [timestamp, 33],
-          [timestamp, 12]
-          ...
-      ]
-    */
-    function generateDayWiseTimeSeries(baseval, count, yrange) {
-      var i = 0;
-      var series = [];
-      while (i < count) {
-        var x = baseval;
-        var y = Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
-
-        series.push([x, y]);
-        baseval += 86400000;
-        i++;
-      }
-      return series;
-    }
+          chartLine.render();
+        });
+      });
+    });
   </script>
 </body>
 
