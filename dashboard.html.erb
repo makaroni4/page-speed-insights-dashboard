@@ -22,9 +22,34 @@
 </head>
 
 <body>
-  <div class="charts">
+  <div id="app">
+    <urls-list></urls-list>
+
+    {{ currentUrl }}
+
+    <apex-chart></apex-chart>
   </div>
 
+  <template id="urls-list">
+    <ul>
+      <li v-for="(urlData, url) in urls">
+        <div v-if="url === currentUrl">
+          {{ url }}
+        </div>
+
+        <div v-else>
+          <a href="#" v-on:click="setCurrentUrl(url)">{{ url }}</a>
+        </div>
+      </li>
+    </ul>
+  </template>
+
+  <template id="apex-chart">
+    <div class="apex-chart-container">
+    </div>
+  </template>
+
+  <script src="https://unpkg.com/vue"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
 
   <script>
@@ -32,115 +57,158 @@
   </script>
 
   <script>
-    // The global window.Apex variable below can be used to set common options for all charts on the page
-    Apex = {
-      chart: {
-        height: 160,
+    var globalData = {
+      urls: reportData,
+      currentUrl: Object.keys(reportData)[0]
+    };
+
+    Vue.component('urls-list', {
+      template: '#urls-list',
+      props: {
       },
-      dataLabels: {
-        enabled: false
+      data: function() {
+        return globalData
       },
-      stroke: {
-        curve: 'straight'
-      },
-      toolbar: {
-        tools: {
-          selection: false
+      methods: {
+        setCurrentUrl(url) {
+          this.currentUrl = url;
         }
-      },
-      markers: {
-        size: 6,
-        hover: {
-          size: 10
-        }
-      },
-      tooltip: {
-        followCursor: false,
-        theme: 'dark',
-        x: {
-          show: false
-        },
-        marker: {
-          show: false
-        },
-        y: {
-          title: {
-            formatter: function() {
-              return ''
-            }
-          }
-        }
-      },
-      grid: {
-        clipMarkers: false
-      },
-      yaxis: {
-        tickAmount: 2
-      },
-      xaxis: {
-        type: 'datetime'
-      },
-    }
+      }
+    });
 
-    Object.keys(reportData).forEach(function(psiUrl) {
-      var urlReport = reportData[psiUrl];
-      var deviceTypes = ["mobile", "desktop"];
-
-      deviceTypes.forEach(function(deviceType) {
-        var metrics = [
-          "speed_index",
-          "first_contentful_paint",
-          "time_to_interactive",
-          "first_meaningful_paint",
-          "first_cpu_idle"
-        ];
-
-        var psiReport = urlReport[deviceType];
-
-        metrics.forEach(function(metric) {
-          var timeline = Object.keys(psiReport).map(function(timestamp) {
-            return [new Date(timestamp), psiReport[timestamp][metric]]
-          });
-
-          console.log(psiUrl)
-          console.log(deviceType)
-          console.log(metric)
-          console.log(timeline)
-
-          var optionsLine = {
+    Vue.component('apex-chart', {
+      template: '#apex-chart',
+      props: {
+        url: String
+      },
+      data: function() {
+        return globalData
+      },
+      methods: {
+        plotUrlData() {
+          window.Apex = {
             chart: {
-              id: deviceType + '-' + metric,
-              group: psiUrl,
-              type: 'line',
+              height: 160,
             },
-            title: {
-              text: psiUrl + ' - ' + deviceType + ' - ' + metric
+            dataLabels: {
+              enabled: false
             },
-            colors: ['#008FFB'],
-            series: [{
-              data: timeline
-            }],
-            yaxis: {
-              labels: {
-                minWidth: 40
+            stroke: {
+              curve: 'straight'
+            },
+            toolbar: {
+              tools: {
+                selection: false
               }
-            }
+            },
+            markers: {
+              size: 6,
+              hover: {
+                size: 10
+              }
+            },
+            tooltip: {
+              followCursor: false,
+              theme: 'dark',
+              x: {
+                show: false
+              },
+              marker: {
+                show: false
+              },
+              y: {
+                title: {
+                  formatter: function() {
+                    return ''
+                  }
+                }
+              }
+            },
+            grid: {
+              clipMarkers: false
+            },
+            yaxis: {
+              tickAmount: 2
+            },
+            xaxis: {
+              type: 'datetime'
+            },
           }
 
-          var $charts = document.querySelector(".charts");
+          var url = this.currentUrl;
+          // console.log(`--> url: ${url}`)
+          var urlReport = this.urls[url];
+          var deviceTypes = ["mobile", "desktop"];
+          var $charts = document.querySelector(".apex-chart-container");
 
-          var $chartContainer = document.createElement('div');
+          $charts.innerHTML = "";
 
-          $charts.appendChild($chartContainer);
+          deviceTypes.forEach(function(deviceType) {
+            var metrics = [
+              "speed_index",
+              "first_contentful_paint",
+              "time_to_interactive",
+              "first_meaningful_paint",
+              "first_cpu_idle"
+            ];
 
-          var chartLine = new ApexCharts(
-            $chartContainer,
-            optionsLine
-          );
+            metrics.forEach(function(metric) {
+              var timeline = Object.keys(urlReport[deviceType]).map(function(timestamp) {
+                return [new Date(timestamp), urlReport[deviceType][timestamp][metric]];
+              });
 
-          chartLine.render();
-        });
-      });
+              console.log(url)
+              console.log(deviceType)
+              console.log(metric)
+              console.log(timeline)
+
+              var optionsLine = {
+                chart: {
+                  id: deviceType + '-' + metric,
+                  group: url,
+                  type: 'line',
+                },
+                title: {
+                  text: deviceType + ' - ' + metric
+                },
+                colors: ['#008FFB'],
+                series: [{
+                  data: timeline
+                }],
+                yaxis: {
+                  labels: {
+                    minWidth: 40
+                  }
+                }
+              }
+
+              var $chartContainer = document.createElement('div');
+
+              $charts.appendChild($chartContainer);
+
+              var chartLine = new ApexCharts(
+                $chartContainer,
+                optionsLine
+              );
+
+              chartLine.render();
+            });
+          });
+        }
+      },
+      watch: {
+      	currentUrl: function() {
+          this.plotUrlData();
+        }
+      },
+      mounted() {
+        this.plotUrlData();
+      }
+    });
+
+    new Vue({
+      el: '#app',
+      data: globalData
     });
   </script>
 </body>
