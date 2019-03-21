@@ -7,6 +7,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>PSI Dashboard</title>
+
+  <style>
+    html {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    *, *:before, *:after {
+      -webkit-box-sizing: inherit;
+      -moz-box-sizing: inherit;
+      box-sizing: inherit;
+    }
+
+    .apex-chart-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      width: 820px;
+    }
+
+    .apex-chart {
+      width: 400px;
+      padding: 10px;
+      margin-bottom: 10px;
+
+      border: 2px solid #E4E4E4;
+      border-radius: 2px;
+    }
+  </style>
 </head>
 
 <body>
@@ -158,6 +188,7 @@
               }
 
               var $chartContainer = document.createElement('div');
+              $chartContainer.className = "apex-chart"
 
               $charts.appendChild($chartContainer);
 
