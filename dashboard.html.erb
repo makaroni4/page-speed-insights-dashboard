@@ -43,7 +43,7 @@
       padding: 10px;
       margin-bottom: 10px;
 
-      border: 2px solid #E4E4E4;
+      border: 1px solid #E4E4E4;
       border-radius: 2px;
     }
 
@@ -52,6 +52,8 @@
       border-collapse: collapse;
       table-layout: fixed;
       width: 100%;
+
+      border-radius: 2px;
     }
 
     .urls-table,
@@ -116,7 +118,7 @@
     <table class="urls-table">
       <thead>
         <tr>
-          <th rowspan="2">Url</th>
+          <th rowspan="2">URL</th>
 
           <th colspan="5">Mobile</th>
 
@@ -168,6 +170,7 @@
     window.Apex = {
       chart: {
         height: 160,
+        fontFamily: 'Roboto, sans-serif'
       },
       dataLabels: {
         enabled: false
@@ -233,7 +236,15 @@
         "time_to_interactive",
         "first_meaningful_paint",
         "first_cpu_idle"
-      ]
+      ],
+      chartOptions: {
+        speed_index: {
+          yaxis: {
+            min: 0,
+            max: 100
+          }
+        }
+      }
     };
 
     Vue.component('urls-table', {
@@ -269,8 +280,15 @@
           var urlReport = this.urls[url];
           var deviceTypes = this.deviceTypes;
           var $charts = document.querySelector(".apex-chart-container");
+          var chartOptions = this.chartOptions;
 
-          $charts.innerHTML = "";
+          var maxValue = function(deviceType, metric) {
+            var values = Object.keys(urlReport[deviceType]).map(function(timestamp) {
+              return urlReport[deviceType][timestamp][metric];
+            });
+
+            return Math.max(...values);
+          };
 
           var outputDeviceMetric = function(deviceType, metric) {
             var timeline = Object.keys(urlReport[deviceType]).map(function(timestamp) {
@@ -303,19 +321,40 @@
                 data: timeline
               }],
               yaxis: {
+                min: 0,
+                max: maxValue(deviceType, metric) + 1,
                 labels: {
                   minWidth: 40
-                }
+                },
+                decimalsInFloat: 1
+              }
+            };
+
+            if(chartOptions[metric]) {
+              optionsLine = {
+                ...optionsLine,
+                ...chartOptions[metric]
               }
             }
 
-            var $chartContainer = document.createElement('div');
-            $chartContainer.className = "apex-chart"
+            var $chartContainer = document.querySelector(`.apex-chart[data-device-type="${deviceType}"][data-metric="${metric}"]`);
 
-            $charts.appendChild($chartContainer);
+            $chart = document.createElement('div');
+
+            if($chartContainer) {
+              $chartContainer.innerHTML = '';
+            } else {
+              $chartContainer = document.createElement('div');
+              $chartContainer.className = "apex-chart"
+              $chartContainer.setAttribute('data-device-type', deviceType);
+              $chartContainer.setAttribute('data-metric', metric);
+              $charts.appendChild($chartContainer);
+            }
+
+            $chartContainer.appendChild($chart);
 
             var chartLine = new ApexCharts(
-              $chartContainer,
+              $chart,
               optionsLine
             );
 
