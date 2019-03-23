@@ -26,15 +26,22 @@
     .app {
       width: 960px;
       margin: 0 auto;
+      padding: 30px 0;
     }
 
     .app__urls-table {
-      margin-bottom: 20px;
+      margin-bottom: 40px;
     }
 
-    .apex-chart-container {
+    .metric-charts__header {
+      margin-bottom: 40px;
+
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .metric-charts__report {
       display: flex;
-      flex-wrap: wrap;
       justify-content: space-between;
     }
 
@@ -120,6 +127,46 @@
     .urls-table__metric-value--slow {
       background-color: #c7221f;
     }
+
+    .metric-charts__device-type {
+      position: relative;
+      padding-left: 30px;
+
+      margin-bottom: 20px;
+
+      font-size: 18px;
+      line-height: 18px;
+    }
+
+    .metric-charts__device-type--mobile:before {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 25px;
+      height: 25px;
+
+      background: url("./icons/mobile.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+
+      content: "";
+    }
+
+    .metric-charts__device-type--desktop:before {
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 25px;
+      height: 25px;
+
+      background: url("./icons/desktop.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+
+      content: "";
+    }
   </style>
 </head>
 
@@ -130,7 +177,7 @@
     </div>
 
     <div class="app__charts">
-      <apex-chart></apex-chart>
+      <metric-charts></metric-charts>
     </div>
   </div>
 
@@ -178,8 +225,31 @@
     </table>
   </template>
 
-  <template id="apex-chart">
-    <div class="apex-chart-container">
+  <template id="metric-charts">
+    <div class="metric-charts">
+      <div class="metric-charts__header">
+        {{ currentUrl }}
+      </div>
+
+      <div class="metric-charts__report">
+        <div class="metric-charts__column">
+          <div class="metric-charts__device-type metric-charts__device-type--mobile">
+            Mobile
+          </div>
+
+          <div class="metric-charts__charts" data-device-type="mobile">
+          </div>
+        </div>
+
+        <div class="metric-charts__column">
+          <div class="metric-charts__device-type metric-charts__device-type--desktop">
+            Desktop
+          </div>
+
+          <div class="metric-charts__charts" data-device-type="desktop">
+          </div>
+        </div>
+      </div>
     </div>
   </template>
 
@@ -260,9 +330,37 @@
       ],
       chartOptions: {
         speed_index: {
+          title: {
+            text: "Speed Index",
+            align: "left"
+          },
           yaxis: {
             min: 0,
             max: 100
+          }
+        },
+        first_contentful_paint: {
+          title: {
+            text: "First Contentful Paint",
+            align: "left"
+          }
+        },
+        time_to_interactive: {
+          title: {
+            text: "Time to Interactive",
+            align: "left"
+          }
+        },
+        first_meaningful_paint: {
+          title: {
+            text: "First Meaningful Paint",
+            align: "left"
+          }
+        },
+        first_cpu_idle: {
+          title: {
+            text: "First CPU Idle",
+            align: "left"
           }
         }
       },
@@ -311,18 +409,17 @@
       }
     });
 
-    Vue.component('apex-chart', {
-      template: '#apex-chart',
+    Vue.component('metric-charts', {
+      template: '#metric-charts',
       data: function() {
         return globalData
       },
       methods: {
-        plotUrlData() {
+        plotCharts(deviceType) {
           var url = this.currentUrl;
           var metrics = this.metrics;
           var urlReport = this.reportData[url];
-          var deviceTypes = this.deviceTypes;
-          var $charts = document.querySelector(".apex-chart-container");
+          var $charts = document.querySelector(`.metric-charts__charts[data-device-type="${deviceType}"]`);
           var chartOptions = this.chartOptions;
 
           var maxValue = function(deviceType, metric) {
@@ -387,7 +484,7 @@
               $chartContainer.innerHTML = '';
             } else {
               $chartContainer = document.createElement('div');
-              $chartContainer.className = "apex-chart"
+              $chartContainer.className = "apex-chart";
               $chartContainer.setAttribute('data-device-type', deviceType);
               $chartContainer.setAttribute('data-metric', metric);
               $charts.appendChild($chartContainer);
@@ -404,9 +501,12 @@
           }
 
           metrics.forEach(function(metric) {
-            outputDeviceMetric("mobile", metric);
-            outputDeviceMetric("desktop", metric);
+            outputDeviceMetric(deviceType, metric);
           });
+        },
+        plotUrlData() {
+          this.plotCharts("mobile");
+          this.plotCharts("desktop");
         }
       },
       watch: {
