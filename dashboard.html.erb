@@ -88,6 +88,10 @@
       line-height: 18px;
 
       word-wrap: break-word;
+    }
+
+    .urls-table__metric,
+    .urls-table__url {
       cursor: pointer;
     }
 
@@ -126,22 +130,22 @@
         </tr>
 
         <tr>
-          <th>Speed Index</th>
-          <th>First Contentful Paint</th>
-          <th>Time To Interactive</th>
-          <th>First Meaningful Paint</th>
-          <th>First CPU Idle</th>
+          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'speed_index')">Speed Index</th>
+          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'first_contentful_paint')">First Contentful Paint</th>
+          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'time_to_interactive')">Time To Interactive</th>
+          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'first_meaningful_paint')">First Meaningful Paint</th>
+          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'first_cpu_idle')">First CPU Idle</th>
 
-          <th>Speed Index</th>
-          <th>First Contentful Paint</th>
-          <th>Time To Interactive</th>
-          <th>First Meaningful Paint</th>
-          <th>First CPU Idle</th>
+          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'speed_index')">Speed Index</th>
+          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'first_contentful_paint')">First Contentful Paint</th>
+          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'time_to_interactive')">Time To Interactive</th>
+          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'first_meaningful_paint')">First Meaningful Paint</th>
+          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'first_cpu_idle')">First CPU Idle</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr v-for="(urlData, url) in urls">
+        <tr v-for="url in urls">
           <td v-on:click="setCurrentUrl(url)" class="urls-table__url">
             {{ url }}
           </td>
@@ -224,7 +228,8 @@
 
   <script>
     var globalData = {
-      urls: reportData,
+      urls: Object.keys(reportData),
+      reportData: reportData,
       currentUrl: Object.keys(reportData)[0],
       deviceTypes: [
         "mobile",
@@ -244,7 +249,8 @@
             max: 100
           }
         }
-      }
+      },
+      sortDirection: 1
     };
 
     Vue.component('urls-table', {
@@ -257,13 +263,17 @@
           this.currentUrl = url;
         },
         latestMetric(url, deviceType, metricName) {
-          var urlData = this.urls[url][deviceType];
+          var urlData = this.reportData[url][deviceType];
 
           var latestTimestamp = Object.keys(urlData).sort(function(a, b){
             return new Date(b) - new Date(a);
           })[0];
 
           return urlData[latestTimestamp][metricName];
+        },
+        sortBy: function(deviceType, metric) {
+          this.urls.sort((a, b) => this.sortDirection * (this.latestMetric(b, deviceType, metric) - this.latestMetric(a, deviceType, metric)));
+          this.sortDirection *= -1;
         }
       }
     });
@@ -277,7 +287,7 @@
         plotUrlData() {
           var url = this.currentUrl;
           var metrics = this.metrics;
-          var urlReport = this.urls[url];
+          var urlReport = this.reportData[url];
           var deviceTypes = this.deviceTypes;
           var $charts = document.querySelector(".apex-chart-container");
           var chartOptions = this.chartOptions;
