@@ -106,6 +106,57 @@
   <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
 
   <script>
+    window.Apex = {
+      chart: {
+        height: 160,
+      },
+      dataLabels: {
+        enabled: false
+      },
+      stroke: {
+        curve: 'straight'
+      },
+      toolbar: {
+        tools: {
+          selection: false
+        }
+      },
+      markers: {
+        size: 6,
+        hover: {
+          size: 10
+        }
+      },
+      tooltip: {
+        followCursor: false,
+        theme: 'dark',
+        x: {
+          show: false
+        },
+        marker: {
+          show: false
+        },
+        y: {
+          title: {
+            formatter: function() {
+              return ''
+            }
+          }
+        }
+      },
+      grid: {
+        clipMarkers: false
+      },
+      yaxis: {
+        tickAmount: 2
+      },
+      xaxis: {
+        type: 'datetime'
+      },
+    }
+  </script>
+
+  <script>
     var reportData = <%= psi_data.to_json %>;
   </script>
 
@@ -154,55 +205,6 @@
       },
       methods: {
         plotUrlData() {
-          window.Apex = {
-            chart: {
-              height: 160,
-            },
-            dataLabels: {
-              enabled: false
-            },
-            stroke: {
-              curve: 'straight'
-            },
-            toolbar: {
-              tools: {
-                selection: false
-              }
-            },
-            markers: {
-              size: 6,
-              hover: {
-                size: 10
-              }
-            },
-            tooltip: {
-              followCursor: false,
-              theme: 'dark',
-              x: {
-                show: false
-              },
-              marker: {
-                show: false
-              },
-              y: {
-                title: {
-                  formatter: function() {
-                    return ''
-                  }
-                }
-              }
-            },
-            grid: {
-              clipMarkers: false
-            },
-            yaxis: {
-              tickAmount: 2
-            },
-            xaxis: {
-              type: 'datetime'
-            },
-          }
-
           var url = this.currentUrl;
           var metrics = this.metrics;
           var urlReport = this.urls[url];
@@ -211,44 +213,47 @@
 
           $charts.innerHTML = "";
 
-          deviceTypes.forEach(function(deviceType) {
-            metrics.forEach(function(metric) {
-              var timeline = Object.keys(urlReport[deviceType]).map(function(timestamp) {
-                return [new Date(timestamp), urlReport[deviceType][timestamp][metric]];
-              });
+          var outputDeviceMetric = function(deviceType, metric) {
+            var timeline = Object.keys(urlReport[deviceType]).map(function(timestamp) {
+              return [new Date(timestamp), urlReport[deviceType][timestamp][metric]];
+            });
 
-              var optionsLine = {
-                chart: {
-                  id: deviceType + '-' + metric,
-                  group: url,
-                  type: 'line',
-                },
-                title: {
-                  text: deviceType + ' - ' + metric
-                },
-                colors: ['#008FFB'],
-                series: [{
-                  data: timeline
-                }],
-                yaxis: {
-                  labels: {
-                    minWidth: 40
-                  }
+            var optionsLine = {
+              chart: {
+                id: deviceType + '-' + metric,
+                group: url,
+                type: 'line',
+              },
+              title: {
+                text: deviceType + ' - ' + metric
+              },
+              colors: ['#008FFB'],
+              series: [{
+                data: timeline
+              }],
+              yaxis: {
+                labels: {
+                  minWidth: 40
                 }
               }
+            }
 
-              var $chartContainer = document.createElement('div');
-              $chartContainer.className = "apex-chart"
+            var $chartContainer = document.createElement('div');
+            $chartContainer.className = "apex-chart"
 
-              $charts.appendChild($chartContainer);
+            $charts.appendChild($chartContainer);
 
-              var chartLine = new ApexCharts(
-                $chartContainer,
-                optionsLine
-              );
+            var chartLine = new ApexCharts(
+              $chartContainer,
+              optionsLine
+            );
 
-              chartLine.render();
-            });
+            chartLine.render();
+          }
+
+          metrics.forEach(function(metric) {
+            outputDeviceMetric("mobile", metric);
+            outputDeviceMetric("desktop", metric);
           });
         }
       },
