@@ -90,8 +90,12 @@
       word-wrap: break-word;
     }
 
-    .urls-table__metric,
-    .urls-table__url {
+    .urls-table__row:hover td {
+      opacity: 0.9;
+    }
+
+    .urls-table__metric-name,
+    .urls-table__row {
       cursor: pointer;
     }
 
@@ -103,6 +107,18 @@
 
     .apex-chart:hover .apexcharts-toolbar {
       display: flex !important;
+    }
+
+    .urls-table__metric-value--fast {
+      background-color: #178239;
+    }
+
+    .urls-table__metric-value--average {
+      background-color: #e67700;
+    }
+
+    .urls-table__metric-value--slow {
+      background-color: #c7221f;
     }
   </style>
 </head>
@@ -130,31 +146,31 @@
         </tr>
 
         <tr>
-          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'speed_index')">Speed Index</th>
-          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'first_contentful_paint')">First Contentful Paint</th>
-          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'time_to_interactive')">Time To Interactive</th>
-          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'first_meaningful_paint')">First Meaningful Paint</th>
-          <th class="urls-table__metric" v-on:click="sortBy('mobile', 'first_cpu_idle')">First CPU Idle</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'speed_index')">Speed Index</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'first_contentful_paint')">First Contentful Paint</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'time_to_interactive')">Time To Interactive</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'first_meaningful_paint')">First Meaningful Paint</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'first_cpu_idle')">First CPU Idle</th>
 
-          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'speed_index')">Speed Index</th>
-          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'first_contentful_paint')">First Contentful Paint</th>
-          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'time_to_interactive')">Time To Interactive</th>
-          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'first_meaningful_paint')">First Meaningful Paint</th>
-          <th class="urls-table__metric" v-on:click="sortBy('desktop', 'first_cpu_idle')">First CPU Idle</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'speed_index')">Speed Index</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'first_contentful_paint')">First Contentful Paint</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'time_to_interactive')">Time To Interactive</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'first_meaningful_paint')">First Meaningful Paint</th>
+          <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'first_cpu_idle')">First CPU Idle</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr v-for="url in urls">
-          <td v-on:click="setCurrentUrl(url)" class="urls-table__url">
+        <tr v-for="url in urls" v-on:click="setCurrentUrl(url)" class="urls-table__row">
+          <td class="urls-table__url">
             {{ url }}
           </td>
 
-          <td v-for="metric in metrics">
+          <td v-for="metric in metrics" v-bind:class="tdClass(url, 'mobile')">
             {{ latestMetric(url, "mobile", metric) }}
           </td>
 
-          <td v-for="metric in metrics">
+          <td v-for="metric in metrics" v-bind:class="tdClass(url, 'desktop')">
             {{ latestMetric(url, "desktop", metric) }}
           </td>
         </tr>
@@ -173,7 +189,7 @@
   <script>
     window.Apex = {
       chart: {
-        height: 160,
+        height: 250,
         fontFamily: 'Roboto, sans-serif'
       },
       dataLabels: {
@@ -214,7 +230,7 @@
         clipMarkers: false
       },
       yaxis: {
-        tickAmount: 2
+        tickAmount: 4
       },
       xaxis: {
         type: 'datetime'
@@ -259,6 +275,17 @@
         return globalData
       },
       methods: {
+        speedIndexScale(url, deviceType) {
+          var latestSpeedIndex = this.latestMetric(url, deviceType, "speed_index");
+
+          if(latestSpeedIndex > 89) {
+            return "fast";
+          } else if (latestSpeedIndex > 49) {
+            return "average";
+          } else {
+            return "slow";
+          }
+        },
         setCurrentUrl(url) {
           this.currentUrl = url;
         },
@@ -271,10 +298,16 @@
 
           return urlData[latestTimestamp][metricName];
         },
-        sortBy: function(deviceType, metric) {
-          this.urls.sort((a, b) => this.sortDirection * (this.latestMetric(b, deviceType, metric) - this.latestMetric(a, deviceType, metric)));
+        sortBy(deviceType, metric, sortDirection = this.sortDirection) {
+          this.urls.sort((a, b) => sortDirection * (this.latestMetric(b, deviceType, metric) - this.latestMetric(a, deviceType, metric)));
           this.sortDirection *= -1;
+        },
+        tdClass(url, deviceType) {
+          return "urls-table__metric-value urls-table__metric-value--" + this.speedIndexScale(url, deviceType)
         }
+      },
+      mounted() {
+        this.sortBy("mobile", "speed_index", -1);
       }
     });
 
@@ -308,7 +341,6 @@
             var optionsLine = {
               chart: {
                 id: deviceType + '-' + metric,
-                group: url,
                 type: 'line',
                 toolbar: {
                   show: true,
