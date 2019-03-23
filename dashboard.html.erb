@@ -51,6 +51,16 @@
     .urls-table__url {
       cursor: pointer;
     }
+
+    /* Since apex charts doesn't support showing toolbar on hover
+    let's make a hack: */
+    .apexcharts-toolbar {
+      display: none !important;
+    }
+
+    .apex-chart:hover .apexcharts-toolbar {
+      display: flex !important;
+    }
   </style>
 </head>
 
@@ -223,6 +233,18 @@
                 id: deviceType + '-' + metric,
                 group: url,
                 type: 'line',
+                toolbar: {
+                  show: true,
+                  tools: {
+                    download: true,
+                    selection: false,
+                    zoom: true,
+                    zoomin: false,
+                    zoomout: false,
+                    pan: false,
+                    reset: true
+                  }
+                }
               },
               title: {
                 text: deviceType + ' - ' + metric
