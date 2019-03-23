@@ -36,28 +36,65 @@
       border: 2px solid #E4E4E4;
       border-radius: 2px;
     }
+
+
+    .urls-table {
+      border-collapse: collapse;
+    }
+
+    .urls-table,
+    .urls-table th,
+    .urls-table td {
+      border: 1px solid #E4E4E4;
+    }
+
+    .urls-table__url {
+      cursor: pointer;
+    }
   </style>
 </head>
 
 <body>
   <div id="app">
-    <urls-list></urls-list>
+    <urls-table></urls-table>
 
     <apex-chart></apex-chart>
   </div>
 
-  <template id="urls-list">
-    <ul>
-      <li v-for="(urlData, url) in urls">
-        <div v-if="url === currentUrl">
-          {{ url }}
-        </div>
+  <template id="urls-table">
+    <table class="urls-table">
+      <thead>
+        <th>Url</th>
 
-        <div v-else>
-          <a href="#" v-on:click="setCurrentUrl(url)">{{ url }}</a>
-        </div>
-      </li>
-    </ul>
+        <th>Mobile Speed Index</th>
+        <th>Mobile First Contentful Paint</th>
+        <th>Mobile Time To Interactive</th>
+        <th>Mobile First Meaningful Paint</th>
+        <th>Mobile First CPU Idle</th>
+
+        <th>Desktop Speed Index</th>
+        <th>Desktop First Contentful Paint</th>
+        <th>Desktop Time To Interactive</th>
+        <th>Desktop First Meaningful Paint</th>
+        <th>Desktop First CPU Idle</th>
+      </thead>
+
+      <tbody>
+        <tr v-for="(urlData, url) in urls">
+          <td v-on:click="setCurrentUrl(url)" class="urls-table__url">
+            {{ url }}
+          </td>
+
+          <td v-for="metric in metrics">
+            {{ latestMetric(url, "mobile", metric) }}
+          </td>
+
+          <td v-for="metric in metrics">
+            {{ latestMetric(url, "desktop", metric) }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </template>
 
   <template id="apex-chart">
@@ -75,17 +112,37 @@
   <script>
     var globalData = {
       urls: reportData,
-      currentUrl: Object.keys(reportData)[0]
+      currentUrl: Object.keys(reportData)[0],
+      deviceTypes: [
+        "mobile",
+        "desktop"
+      ],
+      metrics: [
+        "speed_index",
+        "first_contentful_paint",
+        "time_to_interactive",
+        "first_meaningful_paint",
+        "first_cpu_idle"
+      ]
     };
 
-    Vue.component('urls-list', {
-      template: '#urls-list',
+    Vue.component('urls-table', {
+      template: '#urls-table',
       data: function() {
         return globalData
       },
       methods: {
         setCurrentUrl(url) {
           this.currentUrl = url;
+        },
+        latestMetric(url, deviceType, metricName) {
+          var urlData = this.urls[url][deviceType];
+
+          var latestTimestamp = Object.keys(urlData).sort(function(a, b){
+            return new Date(b) - new Date(a);
+          })[0];
+
+          return urlData[latestTimestamp][metricName];
         }
       }
     });
@@ -147,21 +204,14 @@
           }
 
           var url = this.currentUrl;
+          var metrics = this.metrics;
           var urlReport = this.urls[url];
-          var deviceTypes = ["mobile", "desktop"];
+          var deviceTypes = this.deviceTypes;
           var $charts = document.querySelector(".apex-chart-container");
 
           $charts.innerHTML = "";
 
           deviceTypes.forEach(function(deviceType) {
-            var metrics = [
-              "speed_index",
-              "first_contentful_paint",
-              "time_to_interactive",
-              "first_meaningful_paint",
-              "first_cpu_idle"
-            ];
-
             metrics.forEach(function(metric) {
               var timeline = Object.keys(urlReport[deviceType]).map(function(timestamp) {
                 return [new Date(timestamp), urlReport[deviceType][timestamp][metric]];
