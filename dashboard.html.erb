@@ -8,6 +8,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>PSI Dashboard</title>
 
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
   <style>
     html {
       box-sizing: border-box;
@@ -17,15 +19,27 @@
       box-sizing: inherit;
     }
 
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .app {
+      width: 960px;
+      margin: 0 auto;
+    }
+
+    .app__urls-table {
+      margin-bottom: 20px;
+    }
+
     .apex-chart-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      width: 820px;
     }
 
     .apex-chart {
-      width: 400px;
+      width: 475px;
       padding: 10px;
       margin-bottom: 10px;
 
@@ -36,6 +50,8 @@
 
     .urls-table {
       border-collapse: collapse;
+      table-layout: fixed;
+      width: 100%;
     }
 
     .urls-table,
@@ -44,7 +60,32 @@
       border: 1px solid #E4E4E4;
     }
 
+    .urls-table th:first-child {
+      width: 300px;
+    }
+
+    .urls-table th {
+      padding: 5px 0;
+
+      font-size: 12px;
+      line-height: 14px;
+      text-align: center;
+    }
+
+    .urls-table td {
+      width: 20px;
+      padding: 5px;
+    }
+
+    .urls-table td:not(:first-child) {
+      text-align: center;
+    }
+
     .urls-table__url {
+      font-size: 14px;
+      line-height: 18px;
+
+      word-wrap: break-word;
       cursor: pointer;
     }
 
@@ -61,28 +102,40 @@
 </head>
 
 <body>
-  <div id="app">
-    <urls-table></urls-table>
+  <div id="app" class="app">
+    <div class="app__urls-table">
+      <urls-table></urls-table>
+    </div>
 
-    <apex-chart></apex-chart>
+    <div class="app__charts">
+      <apex-chart></apex-chart>
+    </div>
   </div>
 
   <template id="urls-table">
     <table class="urls-table">
       <thead>
-        <th>Url</th>
+        <tr>
+          <th rowspan="2">Url</th>
 
-        <th>Mobile Speed Index</th>
-        <th>Mobile First Contentful Paint</th>
-        <th>Mobile Time To Interactive</th>
-        <th>Mobile First Meaningful Paint</th>
-        <th>Mobile First CPU Idle</th>
+          <th colspan="5">Mobile</th>
 
-        <th>Desktop Speed Index</th>
-        <th>Desktop First Contentful Paint</th>
-        <th>Desktop Time To Interactive</th>
-        <th>Desktop First Meaningful Paint</th>
-        <th>Desktop First CPU Idle</th>
+          <th colspan="5">Desktop</th>
+        </tr>
+
+        <tr>
+          <th>Speed Index</th>
+          <th>First Contentful Paint</th>
+          <th>Time To Interactive</th>
+          <th>First Meaningful Paint</th>
+          <th>First CPU Idle</th>
+
+          <th>Speed Index</th>
+          <th>First Contentful Paint</th>
+          <th>Time To Interactive</th>
+          <th>First Meaningful Paint</th>
+          <th>First CPU Idle</th>
+        </tr>
       </thead>
 
       <tbody>
