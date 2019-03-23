@@ -167,10 +167,44 @@
 
       content: "";
     }
+
+    .header {
+      padding: 15px 0;
+
+      background-color: #3f85f7;
+    }
+
+    .header__container {
+      width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header__menu {
+      display: block;
+
+      list-style: none;
+    }
   </style>
 </head>
 
 <body>
+  <header class="header">
+    <div class="header__container">
+      <div class="header__logo">
+        PSI Dashboard
+      </div>
+
+      <ul class="header__menu">
+        <li>
+          <a href="https://github.com/makaroni4/page_speed_insights_dashboard">Github repo</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
   <div id="app" class="app">
     <div class="app__urls-table">
       <urls-table></urls-table>
