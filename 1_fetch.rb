@@ -3,23 +3,22 @@ require "uri"
 require "pp"
 require "json"
 require "byebug"
-require "yaml"
-
+require "json"
 
 BASE_URL = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed"
-DATA_FILE = "historic_data.yml"
+DATA_FILE = "data.json"
 PSI_DEVICE_TYPES = %w(mobile desktop)
-URLS_FILE = "urls.yml"
+URLS_FILE = "urls.json"
 
 def persist(url, device_type, report_data)
-  historic_data = File.exist?(DATA_FILE) ? YAML.load(File.read(DATA_FILE)) : {}
+  historic_data = File.exist?(DATA_FILE) ? JSON.parse(File.read(DATA_FILE)) : {}
 
   historic_data[url] ||= {}
   historic_data[url][device_type] ||= {}
   historic_data[url][device_type][Time.now] = report_data
 
   File.open(DATA_FILE, "w") do |file|
-    file.write(historic_data.to_yaml)
+    file.write(historic_data.to_json)
   end
 end
 
@@ -71,7 +70,7 @@ def download_report(url)
   end
 end
 
-urls = YAML.load(File.read(URLS_FILE))
+urls = JSON.parse(File.read(URLS_FILE))
 urls.each do |url|
   download_report(url)
 end
