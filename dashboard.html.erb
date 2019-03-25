@@ -33,11 +33,13 @@
       margin-bottom: 40px;
     }
 
-    .metric-charts__header {
-      margin-bottom: 40px;
-
+    .metric-charts__current-url {
       font-size: 24px;
       line-height: 32px;
+    }
+
+    .metric-charts__header {
+      margin-bottom: 40px;
     }
 
     .metric-charts__report {
@@ -262,7 +264,13 @@
   <template id="metric-charts">
     <div class="metric-charts">
       <div class="metric-charts__header">
-        {{ currentUrl }}
+        <div class="metric-charts__current-url">
+          {{ currentUrl }}
+        </div>
+
+        <a v-bind:href="PSIUrl(currentUrl)" class="metric-charts__open-psi-report" target="_blank">
+          Open PSI report
+        </a>
       </div>
 
       <div class="metric-charts__report">
@@ -449,6 +457,9 @@
         return globalData
       },
       methods: {
+        PSIUrl(url) {
+          return `https://developers.google.com/speed/pagespeed/insights/?url=${url}`;
+        },
         plotCharts(deviceType) {
           var url = this.currentUrl;
           var metrics = this.metrics;
