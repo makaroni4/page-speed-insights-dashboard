@@ -1,0 +1,110 @@
+<template>
+  <div class="metric-charts">
+    <div class="metric-charts__header">
+      <div class="metric-charts__current-url">
+        {{ currentUrl }}
+      </div>
+    </div>
+
+    <div class="metric-charts__report">
+      <div class="metric-charts__column">
+        <div class="metric-charts__device-type metric-charts__device-type--mobile">
+          Mobile
+        </div>
+
+        <div class="metric-charts__charts">
+          <div class="metric-charts__chart" v-for="metric in metrics">
+            <Chart :metric="metric" :deviceType="'mobile'" />
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-charts__column">
+        <div class="metric-charts__device-type metric-charts__device-type--desktop">
+          Desktop
+        </div>
+
+        <div class="metric-charts__chart" v-for="metric in metrics">
+          <Chart :metric="metric" device-type="desktop" />
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style lang="scss">
+  .metric-charts {
+    &__current-url {
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    &__header {
+      margin-bottom: 40px;
+    }
+
+    &__report {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &__device-type {
+      position: relative;
+      padding-left: 30px;
+
+      margin-bottom: 20px;
+
+      font-size: 18px;
+      line-height: 18px;
+
+      &--mobile {
+        &:before {
+          display: block;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 25px;
+          height: 25px;
+
+          background: url("../assets/mobile.svg");
+          background-size: contain;
+          background-repeat: no-repeat;
+
+          content: "";
+        }
+      }
+
+      &--desktop {
+        &:before {
+          display: block;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 25px;
+          height: 25px;
+
+          background: url("../assets/desktop.svg");
+          background-size: contain;
+          background-repeat: no-repeat;
+
+          content: "";
+        }
+      }
+    }
+  }
+</style>
+
+
+<script>
+import Chart from './Chart.vue';
+
+export default {
+  name: 'MetricCharts',
+  data: function() {
+    return globalData
+  },
+  components: {
+    Chart
+  }
+}
+</script>

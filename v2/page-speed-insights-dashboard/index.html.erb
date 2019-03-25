@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>PageSpeed Insights Dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@latest"></script>
+
+    <script>
+      var reportData = <%= psi_data.to_json %>;
+
+      window.Apex = {
+        chart: {
+          height: 250,
+          fontFamily: 'Roboto, sans-serif'
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        toolbar: {
+          tools: {
+            selection: false
+          }
+        },
+        markers: {
+          size: 6,
+          hover: {
+            size: 10
+          }
+        },
+        tooltip: {
+          followCursor: false,
+          theme: 'dark',
+          x: {
+            show: false
+          },
+          marker: {
+            show: false
+          },
+          y: {
+            title: {
+              formatter: function() {
+                return ''
+              }
+            }
+          }
+        },
+        grid: {
+          clipMarkers: false
+        },
+        yaxis: {
+          tickAmount: 4
+        },
+        xaxis: {
+          type: 'datetime'
+        },
+      }
+
+      var globalData = {
+        urls: Object.keys(reportData),
+        reportData: reportData,
+        currentUrl: Object.keys(reportData)[0],
+        deviceTypes: [
+          "mobile",
+          "desktop"
+        ],
+        metrics: [
+          "speed_index",
+          "first_contentful_paint",
+          "time_to_interactive",
+          "first_meaningful_paint",
+          "first_cpu_idle"
+        ],
+        chartOptions: {
+          speed_index: {
+            title: {
+              text: "Speed Index",
+              align: "left"
+            },
+            yaxis: {
+              min: 0,
+              max: 100
+            }
+          },
+          first_contentful_paint: {
+            title: {
+              text: "First Contentful Paint",
+              align: "left"
+            }
+          },
+          time_to_interactive: {
+            title: {
+              text: "Time to Interactive",
+              align: "left"
+            }
+          },
+          first_meaningful_paint: {
+            title: {
+              text: "First Meaningful Paint",
+              align: "left"
+            }
+          },
+          first_cpu_idle: {
+            title: {
+              text: "First CPU Idle",
+              align: "left"
+            }
+          }
+        },
+        sortDirection: 1
+      };
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but page-speed-insights-dashboard doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+
+    <div id="app">
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
