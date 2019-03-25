@@ -108,6 +108,16 @@
       cursor: pointer;
     }
 
+    .urls-table__open-psi-report {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+
+      background: url("./icons/external-link.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
     /* Since apex charts doesn't support showing toolbar on hover
     let's make a hack: */
     .apexcharts-toolbar {
@@ -247,6 +257,8 @@
         <tr v-for="url in urls" v-on:click="setCurrentUrl(url)" class="urls-table__row">
           <td class="urls-table__url">
             {{ url }}
+
+            <a class="urls-table__open-psi-report" v-bind:href="PSIUrl(currentUrl)" target="_blank"></a>
           </td>
 
           <td v-for="metric in metrics" v-bind:class="tdClass(url, 'mobile')">
@@ -267,10 +279,6 @@
         <div class="metric-charts__current-url">
           {{ currentUrl }}
         </div>
-
-        <a v-bind:href="PSIUrl(currentUrl)" class="metric-charts__open-psi-report" target="_blank">
-          Open PSI report
-        </a>
       </div>
 
       <div class="metric-charts__report">
@@ -415,6 +423,9 @@
         return globalData
       },
       methods: {
+        PSIUrl(url) {
+          return `https://developers.google.com/speed/pagespeed/insights/?url=${url}`;
+        },
         speedIndexScale(url, deviceType) {
           var latestSpeedIndex = this.latestMetric(url, deviceType, "speed_index");
 
@@ -457,9 +468,6 @@
         return globalData
       },
       methods: {
-        PSIUrl(url) {
-          return `https://developers.google.com/speed/pagespeed/insights/?url=${url}`;
-        },
         plotCharts(deviceType) {
           var url = this.currentUrl;
           var metrics = this.metrics;
