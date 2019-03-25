@@ -1,7 +1,6 @@
 <template>
   <div class="chart">
     <div class="chart__body">
-      {{ metric }}
     </div>
   </div>
 </template>
@@ -38,16 +37,12 @@ export default {
     "metric"
   ],
   beforeMount() {
-    console.log(this.deviceType);
-    console.log(this.metric)
     window.ApexCharts = ApexCharts;
   },
   mounted () {
     this.init();
   },
   render (createElement) {
-    console.log(this.deviceType);
-    console.log(this.metric)
     return createElement('div')
   },
   methods: {
@@ -60,7 +55,7 @@ export default {
         return [new Date(timestamp), urlReport[deviceType][timestamp][metric]];
       });
     },
-    chartOptions() {
+    apexChartPptions() {
       var optionsLine = {
         chart: {
           id: this.deviceType + '-' + this.metric,
@@ -116,12 +111,9 @@ export default {
       return Math.max(...values);
     },
     init() {
-      console.log(this.currentUrl);
-      console.log(this.deviceType);
-      console.log(this.metric);
-
-      this.chart = new ApexCharts(this.$el, this.chartOptions());
+      this.chart = new ApexCharts(this.$el, this.apexChartPptions());
       this.chart.render();
     },
   },
 };
+</script>
