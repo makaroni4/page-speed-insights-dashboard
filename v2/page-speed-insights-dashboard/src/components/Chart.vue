@@ -30,11 +30,15 @@
 export default {
   name: 'Chart',
   data: function() {
-    return globalData
+    return {
+      chartOptions: globalData.chartOptions,
+      chart: null
+    };
   },
   props: [
-    "deviceType",
-    "metric"
+    "metric",
+    "series",
+    "deviceType"
   ],
   beforeMount() {
     window.ApexCharts = ApexCharts;
@@ -45,17 +49,28 @@ export default {
   render (createElement) {
     return createElement('div')
   },
+  watch: {
+    series: function(newVal, oldVal) {
+      if(!this.chart) {
+        this.init()
+      } else {
+        this.chart.updateSeries([{
+          data: this.timeline()
+        }]);
+      }
+    }
+  },
   methods: {
     timeline() {
-      const urlReport = this.reportData[this.currentUrl];
       const deviceType = this.deviceType;
       const metric = this.metric;
+      const seriesData = this.series[deviceType];
 
-      return Object.keys(urlReport[deviceType]).map((timestamp) => {
-        return [new Date(timestamp), urlReport[deviceType][timestamp][metric]];
+      return Object.keys(seriesData).map((timestamp) => {
+        return [new Date(timestamp), seriesData[timestamp][metric]];
       });
     },
-    apexChartPptions() {
+    apexChartOptions() {
       var optionsLine = {
         chart: {
           id: this.deviceType + '-' + this.metric,
@@ -82,7 +97,7 @@ export default {
         }],
         yaxis: {
           min: 0,
-          max: this.maxValue(this.deviceType, this.metric) + 1,
+          max: this.maxValue() + 1,
           labels: {
             minWidth: 40
           },
@@ -100,18 +115,18 @@ export default {
       return optionsLine;
     },
     maxValue() {
-      const urlReport = this.reportData[this.currentUrl];
       const deviceType = this.deviceType;
       const metric = this.metric;
+      const seriesData = this.series[deviceType];
 
-      const values = Object.keys(urlReport[deviceType]).map((timestamp) => {
-        return urlReport[deviceType][timestamp][metric];
+      const values = Object.keys(seriesData).map((timestamp) => {
+        return seriesData[timestamp][metric];
       });
 
       return Math.max(...values);
     },
     init() {
-      this.chart = new ApexCharts(this.$el, this.apexChartPptions());
+      this.chart = new ApexCharts(this.$el, this.apexChartOptions());
       this.chart.render();
     },
   },

@@ -14,7 +14,7 @@
 
         <div class="metric-charts__charts">
           <div class="metric-charts__chart" v-for="metric in metrics" :key="`mobile-${metric}`">
-            <Chart :metric="metric" :deviceType="'mobile'" />
+            <Chart :metric="metric" :deviceType="'mobile'" :series="reportData[currentUrl]" />
           </div>
         </div>
       </div>
@@ -25,7 +25,7 @@
         </div>
 
         <div class="metric-charts__chart" v-for="metric in metrics" :key="`desktop-${metric}`">
-          <Chart :metric="metric" :deviceType="'desktop'" />
+          <Chart :metric="metric" :deviceType="'desktop'" :series="reportData[currentUrl]" />
         </div>
       </div>
     </div>
