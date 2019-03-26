@@ -14,4 +14,7 @@ module.exports = {
   parserOptions: {
     parser: 'babel-eslint',
   },
+  globals: {
+    "globalData": "writable",
+  }
 };

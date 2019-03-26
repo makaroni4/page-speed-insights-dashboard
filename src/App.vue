@@ -3,13 +3,12 @@
 </template>
 
 <script>
-import PSIDashboard from './components/PSIDashboard.vue';
-
 import axios from 'axios';
+import PSIDashboard from './components/PSIDashboard.vue';
 
 export default {
   name: 'app',
-  data: function() {
+  data: function () {
     return globalData;
   },
   components: {
@@ -23,8 +22,8 @@ export default {
         this.urls = Object.keys(this.reportData);
         this.currentUrl = this.urls[0];
       });
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">
