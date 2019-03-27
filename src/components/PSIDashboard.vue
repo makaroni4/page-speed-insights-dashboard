@@ -20,9 +20,6 @@ import UrlsTable from './UrlsTable.vue';
 
 export default {
   name: 'PSIDashboard',
-  data: function() {
-    return globalData
-  },
   components: {
     Header,
     MetricCharts,

@@ -2,7 +2,7 @@
   <div class="metric-charts">
     <div class="metric-charts__header">
       <div class="metric-charts__current-url">
-        {{ currentUrl }}
+        {{ dashboardStore.currentUrl }}
       </div>
     </div>
 
@@ -13,8 +13,8 @@
         </div>
 
         <div class="metric-charts__charts">
-          <div class="metric-charts__chart" v-for="metric in metrics" :key="`mobile-${metric}`">
-            <Chart :metric="metric" :deviceType="'mobile'" :series="reportData[currentUrl]" />
+          <div class="metric-charts__chart" v-for="metric in dashboardConfig.metrics" :key="`mobile-${metric}`">
+            <Chart :metric="metric" :deviceType="'mobile'" :url="dashboardStore.currentUrl" />
           </div>
         </div>
       </div>
@@ -24,8 +24,8 @@
           Desktop
         </div>
 
-        <div class="metric-charts__chart" v-for="metric in metrics" :key="`desktop-${metric}`">
-          <Chart :metric="metric" :deviceType="'desktop'" :series="reportData[currentUrl]" />
+        <div class="metric-charts__chart" v-for="metric in dashboardConfig.metrics" :key="`desktop-${metric}`">
+          <Chart :metric="metric" :deviceType="'desktop'" :url="dashboardStore.currentUrl" />
         </div>
       </div>
     </div>
@@ -97,11 +97,16 @@
 
 <script>
 import Chart from './Chart.vue';
+import DashboardStore from '../stores/DashboardStore';
+import DashboardConfig from '../configs/DashboardConfig';
 
 export default {
   name: 'MetricCharts',
-  data: function() {
-    return globalData
+  data: function () {
+    return {
+      dashboardStore: DashboardStore.data,
+      dashboardConfig: DashboardConfig,
+    };
   },
   components: {
     Chart

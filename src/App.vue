@@ -1,26 +1,32 @@
 <template>
-  <PSIDashboard v-if="this.currentUrl" />
+  <PSIDashboard v-if="hasData()" />
 </template>
 
 <script>
 import axios from 'axios';
 import PSIDashboard from './components/PSIDashboard.vue';
+import DashboardStore from './stores/DashboardStore';
 
 export default {
   name: 'app',
   data: function () {
-    return globalData;
+    return {
+      dashboardStore: DashboardStore.data
+    };
   },
   components: {
     PSIDashboard,
+  },
+  methods: {
+    hasData: function() {
+      return this.dashboardStore.urls !== null;
+    }
   },
   created() {
     axios
       .get('data/data.json')
       .then((response) => {
-        this.reportData = response.data;
-        this.urls = Object.keys(this.reportData);
-        this.currentUrl = this.urls[0];
+        DashboardStore.init(response.data);
       });
   },
 };

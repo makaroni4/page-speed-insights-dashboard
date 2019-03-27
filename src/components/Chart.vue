@@ -27,20 +27,27 @@
 </style>
 
 <script>
+import DashboardStore from '../stores/DashboardStore';
+import DashboardConfig from '../configs/DashboardConfig';
+import ApexChartConfig from '../configs/ApexChartConfig';
+
 export default {
   name: 'Chart',
   data: function() {
     return {
-      chartOptions: globalData.chartOptions,
+      dashboardStore: DashboardStore.data,
+      dashboardConfig: DashboardConfig,
+      apexChartConfig: ApexChartConfig,
       chart: null
     };
   },
   props: [
     "metric",
-    "series",
-    "deviceType"
+    "deviceType",
+    "url"
   ],
   beforeMount() {
+    window.Apex = this.apexChartConfig;
     window.ApexCharts = ApexCharts;
   },
   mounted () {
@@ -50,7 +57,7 @@ export default {
     return createElement('div')
   },
   watch: {
-    series: function(newVal, oldVal) {
+    url() {
       if(!this.chart) {
         this.init()
       } else {
@@ -64,7 +71,7 @@ export default {
     timeline() {
       const deviceType = this.deviceType;
       const metric = this.metric;
-      const seriesData = this.series[deviceType];
+      const seriesData = this.dashboardStore.urlData[this.url][deviceType];
 
       return Object.keys(seriesData).map((timestamp) => {
         return [new Date(timestamp), seriesData[timestamp][metric]];
@@ -105,22 +112,21 @@ export default {
         }
       };
 
-      if(this.chartOptions[this.metric]) {
+      let metricConfig = { ...this.dashboardConfig.chartOptions[this.metric] }
+      if(metricConfig) {
         optionsLine = {
           ...optionsLine,
-          ...this.chartOptions[this.metric]
+          ...metricConfig
         };
       }
 
       return optionsLine;
     },
     maxValue() {
-      const deviceType = this.deviceType;
-      const metric = this.metric;
-      const seriesData = this.series[deviceType];
+      const timeline = this.timeline();
 
-      const values = Object.keys(seriesData).map((timestamp) => {
-        return seriesData[timestamp][metric];
+      const values = timeline.map((_, value) => {
+        return value;
       });
 
       return Math.max(...values);

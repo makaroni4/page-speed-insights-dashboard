@@ -25,18 +25,18 @@
     </thead>
 
     <tbody>
-      <tr v-for="url in urls" v-on:click="setCurrentUrl(url)" class="urls-table__row">
+      <tr v-for="url in dashboardStore.urls" v-on:click="setCurrentUrl(url)" class="urls-table__row">
         <td class="urls-table__url">
           {{ url }}
 
-          <a class="urls-table__open-psi-report" v-bind:href="PSIUrl(currentUrl)" target="_blank"></a>
+          <a class="urls-table__open-psi-report" v-bind:href="PSIUrl(dashboardStore.currentUrl)" target="_blank"></a>
         </td>
 
-        <td v-for="metric in metrics" v-bind:class="tdClass(url, 'mobile')">
+        <td v-for="metric in dashboardConfig.metrics" v-bind:class="tdClass(url, 'mobile')">
           {{ latestMetric(url, "mobile", metric) }}
         </td>
 
-        <td v-for="metric in metrics" v-bind:class="tdClass(url, 'desktop')">
+        <td v-for="metric in dashboardConfig.metrics" v-bind:class="tdClass(url, 'desktop')">
           {{ latestMetric(url, "desktop", metric) }}
         </td>
       </tr>
@@ -121,48 +121,57 @@
 </style>
 
 <script>
-  export default {
-    name: 'UrlsTable',
-    data: function() {
-      return globalData
+import DashboardStore from '../stores/DashboardStore';
+import DashboardConfig from '../configs/DashboardConfig';
+
+export default {
+  name: 'UrlsTable',
+  data: function () {
+    return {
+      dashboardStore: DashboardStore.data,
+      dashboardConfig: DashboardConfig,
+      sortDirection: 1
+    };
+  },
+  methods: {
+    PSIUrl(url) {
+      return `https://developers.google.com/speed/pagespeed/insights/?url=${url}`;
     },
-    methods: {
-      PSIUrl(url) {
-        return `https://developers.google.com/speed/pagespeed/insights/?url=${url}`;
-      },
-      speedIndexScale(url, deviceType) {
-        var latestSpeedIndex = this.latestMetric(url, deviceType, "speed_index");
+    speedIndexScale(url, deviceType) {
+      var latestSpeedIndex = this.latestMetric(url, deviceType, "speed_index");
 
-        if(latestSpeedIndex > 89) {
-          return "fast";
-        } else if (latestSpeedIndex > 49) {
-          return "average";
-        } else {
-          return "slow";
-        }
-      },
-      setCurrentUrl(url) {
-        this.currentUrl = url;
-      },
-      latestMetric(url, deviceType, metricName) {
-        var urlData = this.reportData[url][deviceType];
-
-        var latestTimestamp = Object.keys(urlData).sort(function(a, b){
-          return new Date(b) - new Date(a);
-        })[0];
-
-        return urlData[latestTimestamp][metricName];
-      },
-      sortBy(deviceType, metric, sortDirection = this.sortDirection) {
-        this.urls.sort((a, b) => sortDirection * (this.latestMetric(b, deviceType, metric) - this.latestMetric(a, deviceType, metric)));
-        this.sortDirection *= -1;
-      },
-      tdClass(url, deviceType) {
-        return "urls-table__metric-value urls-table__metric-value--" + this.speedIndexScale(url, deviceType)
+      if(latestSpeedIndex > 89) {
+        return "fast";
+      } else if (latestSpeedIndex > 49) {
+        return "average";
+      } else {
+        return "slow";
       }
     },
-    mounted() {
-      this.sortBy("mobile", "speed_index", -1);
+    setCurrentUrl(url) {
+      this.dashboardStore.currentUrl = url;
+    },
+    latestMetric(url, deviceType, metricName) {
+      var urlData = this.dashboardStore.urlData[url][deviceType];
+
+      var latestTimestamp = Object.keys(urlData).sort(function(a, b){
+        return new Date(b) - new Date(a);
+      })[0];
+
+      return urlData[latestTimestamp][metricName];
+    },
+    sortBy(deviceType, metric, sortDirection = this.sortDirection) {
+      this.dashboardStore.urls.sort((a, b) => {
+        return sortDirection * (this.latestMetric(b, deviceType, metric) - this.latestMetric(a, deviceType, metric))
+      });
+      this.sortDirection *= -1;
+    },
+    tdClass(url, deviceType) {
+      return "urls-table__metric-value urls-table__metric-value--" + this.speedIndexScale(url, deviceType)
     }
+  },
+  mounted() {
+    this.sortBy("mobile", "speed_index", -1);
   }
+}
 </script>
