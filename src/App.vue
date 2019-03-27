@@ -1,10 +1,12 @@
 <template>
   <PSIDashboard v-if="hasData()" />
+  <Preloader v-else />
 </template>
 
 <script>
 import axios from 'axios';
 import PSIDashboard from './components/PSIDashboard.vue';
+import Preloader from './components/Preloader';
 import DashboardStore from './stores/DashboardStore';
 
 export default {
@@ -16,6 +18,7 @@ export default {
   },
   components: {
     PSIDashboard,
+    Preloader,
   },
   methods: {
     hasData: function() {
