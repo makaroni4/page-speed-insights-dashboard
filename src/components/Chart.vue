@@ -11,8 +11,7 @@
     padding: 10px;
     margin-bottom: 24px;
 
-    border: 1px solid #E4E4E4;
-    border-radius: 2px;
+    border: 1px solid #676767;
 
     /* HACK Since apex charts doesn't support showing toolbar on hover
     let's make a hack: */

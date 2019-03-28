@@ -60,7 +60,7 @@
     &,
     & th,
     & td {
-      border: 1px solid #E4E4E4;
+      border: 1px solid #676767;
     }
 
     th {
@@ -119,15 +119,21 @@
     }
 
     &__metric-value--fast {
-      background-color: #178239;
+      background-color: #48e048;
+
+      color: #270707;
     }
 
     &__metric-value--average {
-      background-color: #e67700;
+      background-color: #F9D423;
+
+      color: #270707;
     }
 
     &__metric-value--slow {
-      background-color: #c7221f;
+      background-color: #FF4E50;
+
+      color: #270707;
     }
 
     &__metric-name {
