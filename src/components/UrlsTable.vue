@@ -9,15 +9,23 @@
       </tr>
 
       <tr>
-        <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'speed_index')">Speed Index</th>
-        <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'first_contentful_paint')">First Contentful Paint</th>
-        <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'time_to_interactive')">Time To Interactive</th>
-        <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'first_meaningful_paint')">First Meaningful Paint</th>
+        <th
+          class="urls-table__metric-name"
+          v-for="metric in dashboardConfig.metrics"
+          v-on:click="sortBy('mobile', metric)"
+          v-bind:key="'th-' + metric + '-mobile'">
+            {{ dashboardConfig.metricsNames[metric] }}
+            <span v-if="sortDeviceType === 'mobile' && sortMetric === metric" v-bind:class="sortDirectionCssClass()"></span>
+        </th>
 
-        <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'speed_index')">Speed Index</th>
-        <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'first_contentful_paint')">First Contentful Paint</th>
-        <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'time_to_interactive')">Time To Interactive</th>
-        <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'first_meaningful_paint')">First Meaningful Paint</th>
+        <th
+          class="urls-table__metric-name"
+          v-for="metric in dashboardConfig.metrics"
+          v-on:click="sortBy('desktop', metric)"
+          v-bind:key="'th-' + metric + '-desktop'">
+            {{ dashboardConfig.metricsNames[metric] }}
+            <span v-if="sortDeviceType === 'desktop' && sortMetric === metric" v-bind:class="sortDirectionCssClass()"></span>
+        </th>
       </tr>
     </thead>
 
@@ -71,8 +79,6 @@
       }
     }
 
-
-
     & td {
       width: 20px;
       padding: 5px;
@@ -124,6 +130,32 @@
       background-color: #c7221f;
     }
 
+    &__metric-name {
+      position: relative;
+    }
+
+    &__sort-direction {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      position: absolute;
+      right: 4px;
+      bottom: 6px;
+
+      &--down {
+        background: url("../assets/triangle.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+
+      &--up {
+        background: url("../assets/triangle.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+
+        transform: scaleY(-1);
+      }
+    }
   }
 </style>
 
@@ -137,12 +169,17 @@ export default {
     return {
       dashboardStore: DashboardStore.data,
       dashboardConfig: DashboardConfig,
-      sortDirection: 1
+      sortDirection: 1,
+      sortDeviceType: "mobile",
+      sortMetric: "speed_index"
     };
   },
   methods: {
     PSIUrl(url) {
       return `https://developers.google.com/speed/pagespeed/insights/?url=${url}`;
+    },
+    sortDirectionCssClass() {
+      return "urls-table__sort-direction urls-table__sort-direction--" + (this.sortDirection === 1 ? 'down' : 'up');
     },
     speedIndexScale(url, deviceType) {
       var latestSpeedIndex = this.latestMetric(url, deviceType, "speed_index");
@@ -168,9 +205,13 @@ export default {
       return urlData[latestTimestamp][metricName];
     },
     sortBy(deviceType, metric, sortDirection = this.sortDirection) {
+      this.sortDeviceType = deviceType;
+      this.sortMetric = metric;
+
       this.dashboardStore.urls.sort((a, b) => {
-        return sortDirection * (this.latestMetric(b, deviceType, metric) - this.latestMetric(a, deviceType, metric))
+        return sortDirection * (this.latestMetric(b, this.sortDeviceType, this.sortMetric) - this.latestMetric(a, this.sortDeviceType, this.sortMetric))
       });
+
       this.sortDirection *= -1;
     },
     tdClass(url, deviceType) {

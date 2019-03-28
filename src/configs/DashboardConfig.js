@@ -9,6 +9,12 @@ const DashboardConfig = {
     "time_to_interactive",
     "first_meaningful_paint"
   ],
+  metricsNames: {
+    speed_index: "Speed Index",
+    first_contentful_paint: "First Contentful Paint",
+    time_to_interactive: "Time to Interactive",
+    first_meaningful_paint: "First Meaningful Paint",
+  },
   chartOptions: {
     speed_index: {
       title: {

@@ -21,7 +21,7 @@
     background-color: #3f85f7;
 
     &__container {
-      width: 960px;
+      width: 1024px;
       margin: 0 auto;
       display: flex;
       align-items: center;
