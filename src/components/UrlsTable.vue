@@ -4,9 +4,8 @@
       <tr>
         <th rowspan="2">URL</th>
 
-        <th colspan="5">Mobile</th>
-
-        <th colspan="5">Desktop</th>
+        <th class="urls-table__device-type-row" colspan="4">Mobile</th>
+        <th class="urls-table__device-type-row" colspan="4">Desktop</th>
       </tr>
 
       <tr>
@@ -14,13 +13,11 @@
         <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'first_contentful_paint')">First Contentful Paint</th>
         <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'time_to_interactive')">Time To Interactive</th>
         <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'first_meaningful_paint')">First Meaningful Paint</th>
-        <th class="urls-table__metric-name" v-on:click="sortBy('mobile', 'first_cpu_idle')">First CPU Idle</th>
 
         <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'speed_index')">Speed Index</th>
         <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'first_contentful_paint')">First Contentful Paint</th>
         <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'time_to_interactive')">Time To Interactive</th>
         <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'first_meaningful_paint')">First Meaningful Paint</th>
-        <th class="urls-table__metric-name" v-on:click="sortBy('desktop', 'first_cpu_idle')">First CPU Idle</th>
       </tr>
     </thead>
 
@@ -58,17 +55,23 @@
       border: 1px solid #E4E4E4;
     }
 
-    & th {
-      padding: 5px 0;
+    th {
+      padding: 5px;
 
       font-size: 12px;
       line-height: 14px;
       text-align: center;
 
+      &.urls-table__device-type-row {
+        line-height: 28px;
+      }
+
       &:first-child {
-        width: 300px;
+        width: 350px;
       }
     }
+
+
 
     & td {
       width: 20px;
@@ -84,6 +87,10 @@
       line-height: 18px;
 
       word-wrap: break-word;
+    }
+
+    &__row {
+      height: 48px;
     }
 
     &__row:hover td {

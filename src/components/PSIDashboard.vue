@@ -45,7 +45,7 @@ export default {
 
     &__charts,
     &__urls-table {
-      width: 960px;
+      width: 1024px;
       margin-left: auto;
       margin-right: auto;
     }

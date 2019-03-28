@@ -7,9 +7,9 @@
 
 <style lang="scss">
   .chart {
-    width: 475px;
+    width: 500px;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 24px;
 
     border: 1px solid #E4E4E4;
     border-radius: 2px;
@@ -106,7 +106,7 @@ export default {
           min: 0,
           max: this.maxValue() + 1,
           labels: {
-            minWidth: 40
+            minWidth: 10
           },
           decimalsInFloat: 1
         }

@@ -7,8 +7,7 @@ const DashboardConfig = {
     "speed_index",
     "first_contentful_paint",
     "time_to_interactive",
-    "first_meaningful_paint",
-    "first_cpu_idle"
+    "first_meaningful_paint"
   ],
   chartOptions: {
     speed_index: {
@@ -36,12 +35,6 @@ const DashboardConfig = {
     first_meaningful_paint: {
       title: {
         text: "First Meaningful Paint",
-        align: "left"
-      }
-    },
-    first_cpu_idle: {
-      title: {
-        text: "First CPU Idle",
         align: "left"
       }
     }

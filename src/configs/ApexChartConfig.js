@@ -7,7 +7,8 @@ const ApexChartConfig = {
     enabled: false
   },
   stroke: {
-    curve: 'straight'
+    curve: 'straight',
+    width: 2
   },
   toolbar: {
     tools: {
@@ -15,9 +16,9 @@ const ApexChartConfig = {
     }
   },
   markers: {
-    size: 6,
+    size: 3,
     hover: {
-      size: 10
+      size: 5
     }
   },
   tooltip: {
