@@ -1,4 +1,4 @@
-# page-speed-insights-dashboard
+# Page Speed Insights Dashboard
 
 ## Project setup
 ```
