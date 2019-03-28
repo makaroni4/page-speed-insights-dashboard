@@ -63,6 +63,13 @@ export default {
         this.chart.updateSeries([{
           data: this.timeline()
         }]);
+
+        this.chart.updateOptions({
+          yaxis: {
+            min: 0,
+            max: this.maxValue(),
+          }
+        });
       }
     }
   },
@@ -103,7 +110,7 @@ export default {
         }],
         yaxis: {
           min: 0,
-          max: this.maxValue() + 1,
+          max: this.maxValue(),
           labels: {
             minWidth: 10
           },
@@ -122,13 +129,16 @@ export default {
       return optionsLine;
     },
     maxValue() {
-      const timeline = this.timeline();
+      if(this.dashboardConfig.chartOptions[this.metric].yaxis) {
+        return this.dashboardConfig.chartOptions[this.metric].yaxis.max;
+      } else {
+        const timeline = this.timeline();
+        const values = timeline.map((value, _) => {
+          return value[1];
+        });
 
-      const values = timeline.map((_, value) => {
-        return value;
-      });
-
-      return Math.max(...values);
+        return Math.ceil(Math.max(...values) + 1);
+      }
     },
     init() {
       this.chart = new ApexCharts(this.$el, this.apexChartOptions());
