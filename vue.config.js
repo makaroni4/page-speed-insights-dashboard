@@ -1,5 +1,7 @@
 module.exports = {
-  publicPath: '<page-speed-insights-dashboard>',
+  publicPath: process.env.NODE_ENV === 'production'
+    ? '/page-speed-insights-dashboard/'
+    : '/',
   css: {
     loaderOptions: {
       sass: {
