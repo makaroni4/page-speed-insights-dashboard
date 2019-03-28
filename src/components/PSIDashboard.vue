@@ -3,6 +3,7 @@
     <div class="psi-dashboard__header">
       <Header />
     </div>
+
     <div class="psi-dashboard__urls-table">
       <UrlsTable />
     </div>
@@ -29,25 +30,24 @@ export default {
 </script>
 
 <style lang="scss">
-  html {
-    box-sizing: border-box;
-  }
-
-  *, *:before, *:after {
-    box-sizing: inherit;
-  }
-
-  body {
-    font-family: "Roboto", sans-serif;
-  }
-
   .psi-dashboard {
-    width: 960px;
-    margin: 0 auto;
-    padding: 30px 0;
+    &__container {
+      padding-bottom: 30px;
+    }
+
+    &__header {
+      margin-bottom: 40px;
+    }
 
     &__urls-table {
       margin-bottom: 40px;
+    }
+
+    &__charts,
+    &__urls-table {
+      width: 960px;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 </style>
