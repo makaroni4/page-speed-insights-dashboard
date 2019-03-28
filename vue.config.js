@@ -1,4 +1,5 @@
 module.exports = {
+  publicPath: '<page-speed-insights-dashboard>',
   css: {
     loaderOptions: {
       sass: {
