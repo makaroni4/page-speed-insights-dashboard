@@ -1,3 +1,4 @@
+
 const DashboardConfig = {
   deviceTypes: [
     "mobile",
@@ -9,6 +10,12 @@ const DashboardConfig = {
     "first_meaningful_paint",
     "time_to_interactive",
   ],
+  metricScales: {
+    speed_index: 0,
+    first_contentful_paint: 1,
+    first_meaningful_paint: 1,
+    time_to_interactive: 1,
+  },
   metricsNames: {
     speed_index: "Speed Index, sec",
     first_contentful_paint: "First Contentful Paint, sec",

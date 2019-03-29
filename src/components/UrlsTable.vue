@@ -118,6 +118,22 @@
       background-repeat: no-repeat;
     }
 
+    &__metric-value {
+      position: relative;
+
+      &:after {
+        width: 6px;
+        height: 6px;
+        position: absolute;
+        top: 7px;
+        right: -10px;
+
+        border-radius: 3px;
+
+        content: "";
+      }
+    }
+
     &__metric-value--fast {
       background-color: #48e048;
 
@@ -202,13 +218,15 @@ export default {
       this.dashboardStore.currentUrl = url;
     },
     latestMetric(url, deviceType, metricName) {
-      var urlData = this.dashboardStore.urlData[url][deviceType];
+      const urlData = this.dashboardStore.urlData[url][deviceType];
 
-      var latestTimestamp = Object.keys(urlData).sort(function(a, b){
+      const latestTimestamp = Object.keys(urlData).sort(function(a, b){
         return new Date(b) - new Date(a);
       })[0];
 
-      return urlData[latestTimestamp][metricName];
+      const latestValue = urlData[latestTimestamp][metricName];
+
+      return latestValue.toFixed(this.dashboardConfig.metricScales[metricName]);
     },
     sortBy(deviceType, metric, sortDirection = this.sortDirection) {
       this.sortDeviceType = deviceType;
