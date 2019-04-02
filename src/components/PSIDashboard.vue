@@ -35,10 +35,6 @@ export default {
       padding-bottom: 30px;
     }
 
-    &__header {
-      margin-bottom: 40px;
-    }
-
     &__urls-table {
       margin-bottom: 40px;
     }

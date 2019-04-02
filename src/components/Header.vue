@@ -2,7 +2,7 @@
   <header class="header">
     <div class="header__container">
       <div class="header__logo">
-        PSI Dashboard
+        PageSpeed Insights Dashboard
       </div>
 
       <ul class="header__menu">
@@ -18,7 +18,9 @@
   .header {
     padding: 15px 0;
 
-    background-color: #3f85f7;
+    &__logo {
+      font-weight: 900;
+    }
 
     &__container {
       width: 1024px;
