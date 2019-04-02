@@ -11,6 +11,10 @@
     <div class="psi-dashboard__charts">
       <MetricCharts />
     </div>
+
+    <div class="psi-dashboard__responsive-meme">
+      <ResponsiveMeme />
+    </div>
   </div>
 </template>
 
@@ -18,19 +22,23 @@
 import Header from './Header.vue';
 import MetricCharts from './MetricCharts.vue';
 import UrlsTable from './UrlsTable.vue';
+import ResponsiveMeme from './ResponsiveMeme.vue';
 
 export default {
   name: 'PSIDashboard',
   components: {
     Header,
     MetricCharts,
-    UrlsTable
+    UrlsTable,
+    ResponsiveMeme
   }
 };
 </script>
 
 <style lang="scss">
   .psi-dashboard {
+    position: relative;
+
     &__container {
       padding-bottom: 30px;
     }
@@ -44,6 +52,17 @@ export default {
       width: 1024px;
       margin-left: auto;
       margin-right: auto;
+    }
+
+    &__responsive-meme {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+
+      @media (min-width: 1000px) {
+        display: none;
+      }
     }
   }
 </style>
