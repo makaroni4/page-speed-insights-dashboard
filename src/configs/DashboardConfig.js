@@ -17,7 +17,7 @@ const DashboardConfig = {
     time_to_interactive: 1,
   },
   metricsNames: {
-    speed_index: "Speed Index, sec",
+    speed_index: "Speed Index",
     first_contentful_paint: "First Contentful Paint, sec",
     time_to_interactive: "Time to Interactive, sec",
     first_meaningful_paint: "First Meaningful Paint, sec",
