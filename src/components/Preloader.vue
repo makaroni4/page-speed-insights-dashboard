@@ -17,8 +17,8 @@
   justify-content: center;
 
   &__spinner {
-    width: 40px;
-    height: 40px;
+    width: $px48;
+    height: $px48;
     background-color: #3f85f7;
 
     margin: 100px auto;

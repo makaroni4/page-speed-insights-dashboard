@@ -16,14 +16,14 @@
 
 <style lang="scss">
   .header {
-    padding: 15px 0;
+    padding: $px16 0;
 
     &__logo {
       font-weight: 900;
     }
 
     &__container {
-      width: 1024px;
+      width: $px1024;
       margin: 0 auto;
       display: flex;
       align-items: center;

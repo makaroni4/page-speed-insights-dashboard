@@ -35,12 +35,12 @@
 <style lang="scss">
   .metric-charts {
     &__current-url {
-      font-size: 24px;
-      line-height: 32px;
+      font-size: $px24;
+      line-height: $px32;
     }
 
     &__header {
-      margin-bottom: 40px;
+      margin-bottom: $px32;
     }
 
     &__report {
@@ -50,12 +50,12 @@
 
     &__device-type {
       position: relative;
-      padding-left: 30px;
+      padding-left: $px32;
 
-      margin-bottom: 20px;
+      margin-bottom: $px24;
 
-      font-size: 18px;
-      line-height: 18px;
+      font-size: $px24;
+      line-height: $px24;
 
       &--mobile {
         &:before {
@@ -63,8 +63,8 @@
           position: absolute;
           bottom: 0;
           left: 0;
-          width: 25px;
-          height: 25px;
+          width: $px24;
+          height: $px24;
 
           background: url("../assets/mobile.svg");
           background-size: contain;
@@ -80,8 +80,8 @@
           position: absolute;
           bottom: 0;
           left: 0;
-          width: 25px;
-          height: 25px;
+          width: $px24;
+          height: $px24;
 
           background: url("../assets/desktop.svg");
           background-size: contain;

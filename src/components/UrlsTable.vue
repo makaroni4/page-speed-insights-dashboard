@@ -55,33 +55,33 @@
     table-layout: fixed;
     width: 100%;
 
-    border-radius: 2px;
+    border-radius: $px2;
 
     &,
     & th,
     & td {
-      border: 1px solid #676767;
+      border: $px1 solid #676767;
     }
 
     th {
-      padding: 5px;
+      padding: $px4;
 
-      font-size: 12px;
-      line-height: 14px;
+      font-size: $px12;
+      line-height: $px16;
       text-align: center;
 
       &.urls-table__device-type-row {
-        line-height: 28px;
+        line-height: $px32;
       }
 
       &:first-child {
-        width: 350px;
+        width: $px320;
       }
     }
 
     & td {
-      width: 20px;
-      padding: 5px;
+      width: $px24;
+      padding: $px4;
 
       &:not(:first-child) {
         text-align: center;
@@ -89,14 +89,14 @@
     }
 
     &__url {
-      font-size: 14px;
-      line-height: 18px;
+      font-size: $px12;
+      line-height: $px16;
 
       word-wrap: break-word;
     }
 
     &__row {
-      height: 48px;
+      height: $px48;
     }
 
     &__row:hover td {
@@ -116,22 +116,6 @@
       background: url("../assets/external-link.svg");
       background-size: contain;
       background-repeat: no-repeat;
-    }
-
-    &__metric-value {
-      position: relative;
-
-      &:after {
-        width: 6px;
-        height: 6px;
-        position: absolute;
-        top: 7px;
-        right: -10px;
-
-        border-radius: 3px;
-
-        content: "";
-      }
     }
 
     &__metric-value--fast {
@@ -158,11 +142,11 @@
 
     &__sort-direction {
       display: inline-block;
-      width: 7px;
-      height: 7px;
+      width: $px8;
+      height: $px8;
       position: absolute;
-      right: 4px;
-      bottom: 6px;
+      right: $px4;
+      bottom: $px4;
 
       &--down {
         background: url("../assets/triangle.svg");

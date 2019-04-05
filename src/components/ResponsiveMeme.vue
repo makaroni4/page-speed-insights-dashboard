@@ -40,8 +40,8 @@ export default {
 <style lang="scss">
   .responsive-meme {
     position: relative;
-    width: 500px;
-    height: 300px;
+    width: $px496;
+    height: $px320;
 
     &__img {
       width: 100%;
@@ -53,11 +53,11 @@ export default {
     }
 
     &__close {
-      width: 30px;
-      height: 30px;
+      width: $px32;
+      height: $px32;
       position: absolute;
-      top: 8px;
-      right: 8px;
+      top: $px8;
+      right: $px8;
     }
   }
 </style>

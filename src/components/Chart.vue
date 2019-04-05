@@ -7,11 +7,11 @@
 
 <style lang="scss">
   .chart {
-    width: 500px;
-    padding: 10px;
-    margin-bottom: 24px;
+    width: $px496;
+    padding: $px8;
+    margin-bottom: $px24;
 
-    border: 1px solid #676767;
+    border: $px1 solid #676767;
 
     /* HACK Since apex charts doesn't support showing toolbar on hover
     let's make a hack: */

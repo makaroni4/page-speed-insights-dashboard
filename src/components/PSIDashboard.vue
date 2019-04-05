@@ -40,27 +40,27 @@ export default {
     position: relative;
 
     &__container {
-      padding-bottom: 30px;
+      padding-bottom: $px32;
     }
 
     &__urls-table {
-      margin-bottom: 40px;
+      margin-bottom: $px48;
     }
 
     &__charts,
     &__urls-table {
-      width: 1024px;
+      width: $px1024;
       margin-left: auto;
       margin-right: auto;
     }
 
     &__responsive-meme {
       position: fixed;
-      bottom: 20px;
+      bottom: $px24;
       left: 50%;
       transform: translateX(-50%);
 
-      @media (min-width: 1000px) {
+      @media (min-width: $px960) {
         display: none;
       }
     }
