@@ -7,7 +7,7 @@
 
       <ul class="header__menu">
         <li>
-          <a href="https://github.com/makaroni4/page_speed_insights_dashboard">Github repo</a>
+          <a class="header__github-link" href="https://github.com/makaroni4/page_speed_insights_dashboard" target="_blank">Github repo</a>
         </li>
       </ul>
     </div>
@@ -34,6 +34,25 @@
       display: block;
 
       list-style: none;
+    }
+
+    &__github-link {
+      position: relative;
+
+      &:before {
+        display: inline-block;
+        position: absolute;
+        bottom: 0;
+        left: -$px32;
+        width: $px24;
+        height: $px24;
+
+        background: url("../assets/github.svg");
+        background-size: contain;
+        background-repeat: no-repeat;
+
+        content: "";
+      }
     }
   }
 </style>

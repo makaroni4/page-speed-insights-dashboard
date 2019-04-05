@@ -1,6 +1,8 @@
-@import "./normalize/normalize";
-@import "./normalize/border_box";
-
 @import "./design_system/typography";
 @import "./design_system/spacing";
 @import "./design_system/colors";
+
+@import "./normalize/normalize";
+@import "./normalize/border_box";
+@import "./normalize/link_styles";
+

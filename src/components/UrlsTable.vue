@@ -34,7 +34,17 @@
         <td class="urls-table__url">
           {{ url }}
 
-          <a class="urls-table__open-psi-report" v-bind:href="PSIUrl(dashboardStore.currentUrl)" target="_blank"></a>
+          <a
+            class="urls-table__open-url"
+            v-bind:href="dashboardStore.currentUrl"
+            target="_blank">
+          </a>
+
+          <a
+            class="urls-table__open-psi-report"
+            v-bind:href="PSIUrl(dashboardStore.currentUrl)"
+            target="_blank">
+          </a>
         </td>
 
         <td v-for="metric in dashboardConfig.metrics" v-bind:class="tdClass(url, 'mobile')">
@@ -108,12 +118,24 @@
       cursor: pointer;
     }
 
-    &__open-psi-report {
+    &__open-url {
       display: inline-block;
-      width: 10px;
-      height: 10px;
+      width: $px12;
+      height: $px12;
+      margin-left: $px4;
 
       background: url("../assets/external-link.svg");
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+
+    &__open-psi-report {
+      display: inline-block;
+      width: $px12;
+      height: $px12;
+      margin-left: $px4;
+
+      background: url("../assets/psi-link.svg");
       background-size: contain;
       background-repeat: no-repeat;
     }
