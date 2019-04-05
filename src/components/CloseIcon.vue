@@ -13,7 +13,7 @@ export default {
     cursor: pointer;
 
     path {
-      fill: #FFF;
+      fill: $white;
     }
 
     &:hover {

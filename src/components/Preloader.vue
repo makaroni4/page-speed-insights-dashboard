@@ -19,7 +19,7 @@
   &__spinner {
     width: $px48;
     height: $px48;
-    background-color: #3f85f7;
+    background-color: $blue;
 
     margin: 100px auto;
     animation: sk-rotateplane 1.2s infinite ease-in-out;

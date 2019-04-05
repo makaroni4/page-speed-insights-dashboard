@@ -60,7 +60,7 @@
     &,
     & th,
     & td {
-      border: $px1 solid #676767;
+      border: $px1 solid $grey;
     }
 
     th {
@@ -119,21 +119,21 @@
     }
 
     &__metric-value--fast {
-      background-color: #48e048;
+      background-color: $green;
 
-      color: #270707;
+      color: $black;
     }
 
     &__metric-value--average {
-      background-color: #F9D423;
+      background-color: $orange;
 
-      color: #270707;
+      color: $black;
     }
 
     &__metric-value--slow {
-      background-color: #FF4E50;
+      background-color: $red;
 
-      color: #270707;
+      color: $black;
     }
 
     &__metric-name {
