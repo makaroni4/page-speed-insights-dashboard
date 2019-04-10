@@ -6,6 +6,10 @@ PSI (PageSpeed Insights) Dashboard is a **free** web performance monitoring tool
 2. [Github Pages](https://pages.github.com/) for keeping the data and hosting the dashboard.
 3. [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler) for fetching the data daily/hourly which is free.
 
-![PageSpeed Insight Dashboard](https://user-images.githubusercontent.com/768070/55917323-4a196380-5bef-11e9-9a49-dd5111a5eedf.png)
+## Demo
+
+The Github repo with dashboard data is [here](https://github.com/makaroni4/psi_dashboard_test). Check out the [demo dashboard here](https://makaroni4.github.io/psi_dashboard_test/). It looks like this:
+
+![PageSpeed Insight Dashboard](https://user-images.githubusercontent.com/768070/55917816-0fb0c600-5bf1-11e9-9cb1-cae4ece709c0.png)
 
 ## How to install
