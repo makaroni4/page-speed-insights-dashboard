@@ -250,6 +250,8 @@ export default {
   },
   mounted() {
     this.sortBy("mobile", "speed_index", -1);
+
+    this.dashboardStore.currentUrl = this.dashboardStore.urls[0];
   }
 }
 </script>
