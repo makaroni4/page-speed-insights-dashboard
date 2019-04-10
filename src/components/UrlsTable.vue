@@ -30,7 +30,7 @@
     </thead>
 
     <tbody>
-      <tr v-for="url in dashboardStore.urls" v-on:click="setCurrentUrl(url)" class="urls-table__row">
+      <tr v-for="url in dashboardStore.urls" v-on:click="setCurrentUrl(url)" v-bind:class="urlRowCssClass(url)">
         <td class="urls-table__url">
           {{ url }}
 
@@ -107,10 +107,14 @@
 
     &__row {
       height: $px48;
-    }
 
-    &__row:hover td {
-      opacity: 0.9;
+      &--active td {
+        opacity: 0.8;
+      }
+
+      &:hover td {
+        opacity: 0.8;
+      }
     }
 
     &__metric-name,
@@ -203,6 +207,15 @@ export default {
     };
   },
   methods: {
+    urlRowCssClass(url) {
+      let cssClass = "urls-table__row";
+
+      if(this.dashboardStore.currentUrl === url) {
+        cssClass += " urls-table__row--active";
+      }
+
+      return cssClass;
+    },
     PSIUrl(url) {
       return `https://developers.google.com/speed/pagespeed/insights/?url=${url}`;
     },

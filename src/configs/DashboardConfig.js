@@ -35,19 +35,19 @@ const DashboardConfig = {
     },
     first_contentful_paint: {
       title: {
-        text: "First Contentful Paint",
+        text: "First Contentful Paint, sec",
         align: "left"
       }
     },
     time_to_interactive: {
       title: {
-        text: "Time to Interactive",
+        text: "Time to Interactive, sec",
         align: "left"
       }
     },
     first_meaningful_paint: {
       title: {
-        text: "First Meaningful Paint",
+        text: "First Meaningful Paint, sec",
         align: "left"
       }
     }
