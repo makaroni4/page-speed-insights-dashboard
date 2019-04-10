@@ -1,39 +1,11 @@
-# Page Speed Insights Dashboard
+# PageSpeed Insights Dashboard
 
-## Project setup
-```
-npm install
-```
+PSI (PageSpeed Insights) Dashboard is a **free** web performance monitoring tool. The building blocks of PSI Dashboard are:
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+1. [PageSpeed Insights](https://developers.google.com/speed/pagespeed/insights/) API from Google, it's free and don't require an API key.
+2. [Github Pages](https://pages.github.com/) for keeping the data and hosting the dashboard.
+3. [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler) for fetching the data daily/hourly which is free.
 
-### Compiles and minifies for production
-```
-npm run build
-```
+![PageSpeed Insight Dashboard](https://user-images.githubusercontent.com/768070/55917323-4a196380-5bef-11e9-9a49-dd5111a5eedf.png)
 
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your end-to-end tests
-```
-npm run test:e2e
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## How to install
