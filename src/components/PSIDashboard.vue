@@ -15,6 +15,10 @@
     <div class="psi-dashboard__responsive-meme">
       <ResponsiveMeme />
     </div>
+
+    <div class="psi-dashboard__footer">
+      <Footer />
+    </div>
   </div>
 </template>
 
@@ -23,6 +27,7 @@ import Header from './Header.vue';
 import MetricCharts from './MetricCharts.vue';
 import UrlsTable from './UrlsTable.vue';
 import ResponsiveMeme from './ResponsiveMeme.vue';
+import Footer from './Footer.vue';
 
 export default {
   name: 'PSIDashboard',
@@ -30,7 +35,8 @@ export default {
     Header,
     MetricCharts,
     UrlsTable,
-    ResponsiveMeme
+    ResponsiveMeme,
+    Footer
   }
 };
 </script>
@@ -52,6 +58,10 @@ export default {
       width: $px1024;
       margin-left: auto;
       margin-right: auto;
+    }
+
+    &__charts {
+      margin-bottom: $px24;
     }
 
     &__responsive-meme {
