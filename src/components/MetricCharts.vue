@@ -6,6 +6,18 @@
       </div>
     </div>
 
+    <div class="metric-charts__datepicker">
+      <div class="metric-charts__date">
+        <label>From</label>
+        <Datepicker :value="startDate" @selected="startDateChanged" />
+      </div>
+
+      <div class="metric-charts__date">
+        <label>To</label>
+        <Datepicker :value="finishDate" @selected="finishDateChanged" />
+      </div>
+    </div>
+
     <div class="metric-charts__report">
       <div class="metric-charts__column">
         <div class="metric-charts__device-type metric-charts__device-type--mobile">
@@ -14,7 +26,12 @@
 
         <div class="metric-charts__charts">
           <div class="metric-charts__chart" v-for="metric in dashboardConfig.metrics" :key="`mobile-${metric}`">
-            <Chart :metric="metric" :deviceType="'mobile'" :url="dashboardStore.currentUrl" />
+            <Chart
+              :metric="metric"
+              :deviceType="'mobile'"
+              :url="dashboardStore.currentUrl"
+              :startDate="startDate"
+              :finishDate="finishDate" />
           </div>
         </div>
       </div>
@@ -25,7 +42,12 @@
         </div>
 
         <div class="metric-charts__chart" v-for="metric in dashboardConfig.metrics" :key="`desktop-${metric}`">
-          <Chart :metric="metric" :deviceType="'desktop'" :url="dashboardStore.currentUrl" />
+          <Chart
+            :metric="metric"
+            :deviceType="'desktop'"
+            :url="dashboardStore.currentUrl"
+            :startDate="startDate"
+            :finishDate="finishDate" />
         </div>
       </div>
     </div>
@@ -37,6 +59,17 @@
     &__current-url {
       font-size: $px24;
       line-height: $px32;
+    }
+
+    &__datepicker {
+      display: flex;
+      margin-bottom: $px32;
+    }
+
+    &__date {
+      &:not(:first-child) {
+        margin-left: $px16;
+      }
     }
 
     &__header {
@@ -99,17 +132,34 @@
 import Chart from './Chart.vue';
 import DashboardStore from '../stores/DashboardStore';
 import DashboardConfig from '../configs/DashboardConfig';
+import Datepicker from 'vuejs-datepicker';
+
+const startDate = new Date();
+startDate.setMonth(startDate.getMonth() - 2);
+
+const finishDate = new Date();
 
 export default {
   name: 'MetricCharts',
   data: function () {
     return {
+      startDate: startDate,
+      finishDate: finishDate,
       dashboardStore: DashboardStore.data,
       dashboardConfig: DashboardConfig,
     };
   },
   components: {
-    Chart
+    Chart,
+    Datepicker
+  },
+  methods: {
+    startDateChanged(newDate) {
+      this.startDate = newDate;
+    },
+    finishDateChanged(newDate) {
+      this.finishDate = newDate;
+    }
   }
 }
 </script>

@@ -43,7 +43,9 @@ export default {
   props: [
     "metric",
     "deviceType",
-    "url"
+    "url",
+    "startDate",
+    "finishDate"
   ],
   beforeMount() {
     window.Apex = this.apexChartConfig;
@@ -56,6 +58,30 @@ export default {
     return createElement('div')
   },
   watch: {
+    startDate() {
+      this.chart.updateOptions({
+        xaxis: {
+          min: this.startDate.getTime(),
+          max: this.finishDate.getTime()
+        },
+        yaxis: {
+          min: 0,
+          max: this.maxValue(),
+        }
+      });
+    },
+    finishDate() {
+      this.chart.updateOptions({
+        xaxis: {
+          min: this.startDate.getTime(),
+          max: this.finishDate.getTime()
+        },
+        yaxis: {
+          min: 0,
+          max: this.maxValue(),
+        }
+      });
+    },
     url() {
       if(!this.chart) {
         this.init()
@@ -65,6 +91,10 @@ export default {
         }]);
 
         this.chart.updateOptions({
+          xaxis: {
+            min: this.startDate.getTime(),
+            max: this.finishDate.getTime()
+          },
           yaxis: {
             min: 0,
             max: this.maxValue(),
@@ -92,10 +122,10 @@ export default {
             show: true,
             tools: {
               download: true,
-              selection: false,
+              selection: true,
               zoom: true,
-              zoomin: false,
-              zoomout: false,
+              zoomin: true,
+              zoomout: true,
               pan: false,
               reset: true
             }
